@@ -19,12 +19,17 @@ public class SnowflakeService {
 
     private IDGen idGen;
 
+    public static String getEnv(String key, String defaultValue) {
+        String val = System.getenv(key);
+        return val == null ? defaultValue : val;
+    }
+
     public SnowflakeService() throws InitException {
         Properties properties = PropertyFactory.getProperties();
-        boolean flag = Boolean.parseBoolean(properties.getProperty(Constants.LEAF_SNOWFLAKE_ENABLE, "true"));
+        boolean flag = Boolean.parseBoolean(getEnv(Constants.LEAF_SNOWFLAKE_ENABLE, "false"));
         if (flag) {
-            String zkAddress = properties.getProperty(Constants.LEAF_SNOWFLAKE_ZK_ADDRESS);
-            int port = Integer.parseInt(properties.getProperty(Constants.LEAF_SNOWFLAKE_PORT));
+            String zkAddress = getEnv(Constants.LEAF_SNOWFLAKE_ZK_ADDRESS, "");
+            int port = Integer.parseInt(getEnv(Constants.LEAF_SNOWFLAKE_PORT, ""));
             idGen = new SnowflakeIDGenImpl(zkAddress, port);
             if(idGen.init()) {
                 logger.info("Snowflake Service Init Successfully");

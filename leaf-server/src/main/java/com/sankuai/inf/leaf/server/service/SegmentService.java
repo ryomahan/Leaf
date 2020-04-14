@@ -24,15 +24,25 @@ public class SegmentService {
     private IDGen idGen;
     private DruidDataSource dataSource;
 
+    public static String getEnv(String key, String defaultValue) {
+        // 改用环境变量进行系统设置
+        String val = System.getenv(key);
+        return val == null ? defaultValue : val;
+    }
+
     public SegmentService() throws SQLException, InitException {
-        Properties properties = PropertyFactory.getProperties();
-        boolean flag = Boolean.parseBoolean(properties.getProperty(Constants.LEAF_SEGMENT_ENABLE, "true"));
+        // 默认开启 SEGMENT
+        boolean flag = Boolean.parseBoolean(getEnv(Constants.LEAF_SEGMENT_ENABLE, "false"));
         if (flag) {
-            // Config dataSource
+            // 设置数据库信息
             dataSource = new DruidDataSource();
-            dataSource.setUrl(properties.getProperty(Constants.LEAF_JDBC_URL));
-            dataSource.setUsername(properties.getProperty(Constants.LEAF_JDBC_USERNAME));
-            dataSource.setPassword(properties.getProperty(Constants.LEAF_JDBC_PASSWORD));
+            String mysqlHost = getEnv(Constants.LEAF_MYSQL_HOST, "");
+            String mysqlPort = getEnv(Constants.LEAF_MYSQL_PORT, "");
+            String mysqlDatabase = getEnv(Constants.LEAF_MYSQL_DATABASE, "");
+            String url = "jdbc:mysql://" + mysqlHost + ":" + mysqlPort + "/" + mysqlDatabase;
+            dataSource.setUrl(url);
+            dataSource.setUsername(getEnv(Constants.LEAF_MYSQL_USERNAME, ""));
+            dataSource.setPassword(getEnv(Constants.LEAF_MYSQL_PASSWORD, ""));
             dataSource.init();
 
             // Config Dao

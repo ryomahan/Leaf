@@ -34,6 +34,7 @@ public class LeafController {
 
     private String get(@PathVariable("key") String key, Result id) {
         Result result;
+        // 判断是否为空
         if (key == null || key.isEmpty()) {
             throw new NoKeyException();
         }

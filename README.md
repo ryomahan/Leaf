@@ -4,8 +4,6 @@
 >
 > ​               — Leibnitz
 
-[中文文档](./README_CN.md) | [English Document](./README.md)
-
 ## Introduction
 
 Leaf refers to some common ID generation schemes in the industry, including redis, UUID, snowflake, etc.
@@ -49,26 +47,26 @@ sh deploy/run.sh
 ```shell
 #segment
 curl http://localhost:8080/api/segment/get/leaf-segment-test
+
 #snowflake
 curl http://localhost:8080/api/snowflake/get/test
 ```
 
 #### Configuration
 
-Leaf provides two ways to generate ids (segment mode and snowflake mode), which you can turn on at the same time or specify one way to turn on (both are off by default).
+Use environment variables as configuration items instead
 
-Leaf Server configuration is in the leaf-server/src/main/resources/leaf.properties
-
-| configuration             | meaning                          | default |
-| ------------------------- | ----------------------------- | ------ |
-| leaf.name                 | leaf service name                  |        |
-| leaf.segment.enable       | whether segment mode is enabled             | false  |
-| leaf.jdbc.url             | mysql url                 |        |
-| leaf.jdbc.username        | mysql username                 |        |
-| leaf.jdbc.password        | mysql password                   |        |
-| leaf.snowflake.enable     | whether snowflake mode is enabled         | false  |
-| leaf.snowflake.zk.address | zk address under snowflake mode      |        |
-| leaf.snowflake.port       | service registration port under snowflake mode |        |
+| environment                       | meaning                           | default  |
+| --------------------------------- | --------------------------------- | -------- |
+| LEAF_SEGMENT_ENABLE               | whether segment mode is enabled   |          |
+| LEAF_MYSQL_HOST                   | mysql host                        |          |
+| LEAF_MYSQL_PORT                   | mysql port                        |          |
+| LEAF_MYSQL_DATBASE                | mysql database                    |          |
+| LEAF_MYSQL_USERNAME               | mysql username                    |          |
+| LEAF_MYSQL_PASSWORD               | mysql password                    |          |
+| LEAF_SNOWFLAKE_PORT               | zookeeper port                    |          |
+| LEAF_SNOWFLAKE_ENABLE             | whether snowflake mode is enabled |          |
+| LEAF_SNOWFLAKE_ZOOKEEPER_ADDRESS  | zookeeper address                 |          |
 
 ### Segment mode 
 
@@ -108,10 +106,3 @@ configure leaf.snowflake.zk.address in the leaf.properties, and configure the le
 ### monitor page
 
 segment mode: http://localhost:8080/cache
-
-### Leaf Core 
-
-Of course, in order to pursue higher performance, you need to deploy the Leaf service through RPC Server, which only needs to introduce the leaf-core package and encapsulate the API that generates the ID into the specified RPC framework.
-
-#### Attention
-Note that leaf's current IP acquisition logic in the case of snowflake mode takes the first network card IP directly (especially for services that change IP) to avoid wasting the workId

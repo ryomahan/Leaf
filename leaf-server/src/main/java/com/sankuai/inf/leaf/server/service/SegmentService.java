@@ -36,13 +36,13 @@ public class SegmentService {
         if (flag) {
             // 设置数据库信息
             dataSource = new DruidDataSource();
-            String mysqlHost = getEnv(Constants.LEAF_MYSQL_HOST, "");
-            String mysqlPort = getEnv(Constants.LEAF_MYSQL_PORT, "");
-            String mysqlDatabase = getEnv(Constants.LEAF_MYSQL_DATABASE, "");
+            String mysqlHost = getEnv(Constants.LEAF_MYSQL_HOST, "127.0.0.1");
+            String mysqlPort = getEnv(Constants.LEAF_MYSQL_PORT, "3306");
+            String mysqlDatabase = getEnv(Constants.LEAF_MYSQL_DATABASE, "isms");
             String url = "jdbc:mysql://" + mysqlHost + ":" + mysqlPort + "/" + mysqlDatabase;
             dataSource.setUrl(url);
-            dataSource.setUsername(getEnv(Constants.LEAF_MYSQL_USERNAME, ""));
-            dataSource.setPassword(getEnv(Constants.LEAF_MYSQL_PASSWORD, ""));
+            dataSource.setUsername(getEnv(Constants.LEAF_MYSQL_USERNAME, "root"));
+            dataSource.setPassword(getEnv(Constants.LEAF_MYSQL_PASSWORD, "ryomahan1996"));
             dataSource.init();
 
             // Config Dao
